@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
+import ru.job4j.accident.model.Rule;
 import ru.job4j.accident.service.AccidentService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,22 +28,27 @@ public class AccidentController {
     public String accidents(Model model) {
         List<AccidentType> types = service.types();
         Collection<Accident> accidents = service.show();
+        List<Rule> rules = service.rules();
         model.addAttribute("types", types);
         model.addAttribute("user", "John Doe");
         model.addAttribute("accidents", accidents);
+        model.addAttribute("rules", rules);
         return "accidents";
     }
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
         List<AccidentType> types = service.types();
+        List<Rule> rules = service.rules();
         model.addAttribute("types", types);
+        model.addAttribute("rules", rules);
         return "createAccident";
     }
 
 
     @PostMapping("/saveAccident")
-    public String save(@ModelAttribute Accident accident) {
+    public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
+        String[] ids = req.getParameterValues("rIds");
         service.add(accident);
         return "redirect:/accidents";
     }

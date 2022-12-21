@@ -3,6 +3,7 @@ package ru.job4j.accident.service;
 import org.springframework.stereotype.Service;
 import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
+import ru.job4j.accident.model.Rule;
 import ru.job4j.accident.repository.AccidentRepository;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class AccidentService {
     public Collection<Accident> show() {
         Collection<Accident> accidents = accidentRepository.show();
         List<AccidentType> types = types();
+        List<Rule> rules = rules();
         for (Accident a: accidents) {
             a.setType(types.get(a.getId()));
         }
@@ -43,4 +45,13 @@ public class AccidentService {
         types.add(new AccidentType(3, "Машина и велосипед"));
         return types;
     }
+    public List<Rule> rules() {
+        List<Rule> rules = List.of(
+                new Rule(1, "Статья. 1"),
+                new Rule(2, "Статья. 2"),
+                new Rule(3, "Статья. 3")
+        );
+        return rules;
+    }
+
 }

@@ -41,6 +41,7 @@
         <th scope="col">Text</th>
         <th scope="col">Address</th>
         <th scope="col">Accident Type</th>
+        <th scope="col">Rules</th>
       </tr>
       </thead>
       <tbody>
@@ -56,6 +57,9 @@
         <td th:text="${accident.text}" />
         <td th:text="${accident.address}" />
         <td th:text="${accident.type.name}" />
+        <td  th:each="rule: ${accident.getRules()}"
+             th:text="${rule.name}" >
+        </td>
       </tr>
       </tbody>
     </table>
