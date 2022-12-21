@@ -19,4 +19,11 @@ public class AccidentService {
     public Collection<Accident> show() {
         return accidentRepository.show();
     }
+
+    public Accident findById(int id) {
+        return accidentRepository.findById(id);
+    }
+    public void update(Accident accident) {
+        accidentRepository.update(accident);
+    }
 }

@@ -12,10 +12,20 @@ public class AccidentRepository {
     private ConcurrentHashMap<Integer, Accident> store = new ConcurrentHashMap<>();
 
     public void add(Accident accident) {
+        while (store.containsKey(accident.getId())) {
+            accident.setId(accident.getId() + 1);
+        }
         store.put(accident.getId(), accident);
     }
 
     public Collection<Accident> show() {
       return store.values();
+    }
+
+    public Accident findById(int id) {
+        return store.get(id);
+    }
+    public void update(Accident accident) {
+        store.replace(accident.getId(), accident);
     }
 }
