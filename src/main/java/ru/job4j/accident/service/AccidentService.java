@@ -6,9 +6,8 @@ import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
 import ru.job4j.accident.repository.AccidentRepository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 public class AccidentService {
@@ -34,20 +33,28 @@ public class AccidentService {
     public void update(Accident accident) {
         accidentRepository.update(accident);
     }
-    public List<AccidentType> getTypes() {
-        List<AccidentType> types = new ArrayList<>();
-        types.add(new AccidentType(1, "Две машины"));
-        types.add(new AccidentType(2, "Машина и человек"));
-        types.add(new AccidentType(3, "Машина и велосипед"));
-        return types;
+    public Map<Integer, AccidentType> getTypes() {
+        Map<Integer, AccidentType> map = new HashMap<>();
+        map.put(1, new AccidentType(1, "Две машины"));
+        map.put(2, new AccidentType(2, "Машина и человек"));
+        map.put(3, new AccidentType(3, "Машина и велосипед"));
+        return map;
     }
-    public List<Rule> rules() {
+    public List<Rule> getRules() {
         List<Rule> rules = List.of(
                 new Rule(1, "Статья. 1"),
                 new Rule(2, "Статья. 2"),
                 new Rule(3, "Статья. 3")
         );
         return rules;
+    }
+
+    public void fillRules(Accident accident, String[] rls) {
+        List<Rule> rules = getRules();
+        accident.setRules(new HashSet<>());
+        for (int i = 0; i < rls.length; i++) {
+                accident.getRules().add(rules.get(i));
+        }
     }
 
 }
