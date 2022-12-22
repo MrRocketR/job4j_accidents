@@ -3,6 +3,7 @@ package ru.job4j.accident.model;
 import lombok.*;
 
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Data
 @AllArgsConstructor
@@ -11,11 +12,9 @@ import java.util.Set;
 public class Accident {
 
     @EqualsAndHashCode.Include
-    private int id;
+    private AtomicInteger id;
     private String name;
     private String text;
     private String address;
-    private AccidentType type;
-    private Set<Rule> rules;
 
 }

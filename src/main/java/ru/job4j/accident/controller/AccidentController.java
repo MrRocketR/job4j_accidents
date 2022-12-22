@@ -26,29 +26,20 @@ public class AccidentController {
 
     @GetMapping("/accidents")
     public String accidents(Model model) {
-        List<AccidentType> types = service.types();
-        Collection<Accident> accidents = service.show();
-        List<Rule> rules = service.rules();
-        model.addAttribute("types", types);
+        Collection<Accident> accidents = service.showAccidents();
         model.addAttribute("user", "John Doe");
         model.addAttribute("accidents", accidents);
-        model.addAttribute("rules", rules);
         return "accidents";
     }
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        List<AccidentType> types = service.types();
-        List<Rule> rules = service.rules();
-        model.addAttribute("types", types);
-        model.addAttribute("rules", rules);
         return "createAccident";
     }
 
 
     @PostMapping("/saveAccident")
-    public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
-        String[] ids = req.getParameterValues("rIds");
+    public String save(@ModelAttribute Accident accident) {
         service.add(accident);
         return "redirect:/accidents";
     }

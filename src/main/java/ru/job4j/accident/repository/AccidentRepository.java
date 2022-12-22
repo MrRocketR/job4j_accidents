@@ -5,17 +5,20 @@ import ru.job4j.accident.model.Accident;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class AccidentRepository {
 
-    private ConcurrentHashMap<Integer, Accident> store = new ConcurrentHashMap<>();
+    private  ConcurrentHashMap<Integer, Accident> store = new ConcurrentHashMap<>();
+    private  AtomicInteger generatedIds = new AtomicInteger(0);
 
     public void add(Accident accident) {
-        while (store.containsKey(accident.getId())) {
-            accident.setId(accident.getId() + 1);
+        while (store.containsKey(generatedIds.get())) {
+            generatedIds.incrementAndGet();
         }
-        store.put(accident.getId(), accident);
+        accident.setId(generatedIds);
+        store.put(accident.getId().get(), accident);
     }
 
     public Collection<Accident> show() {
@@ -26,6 +29,7 @@ public class AccidentRepository {
         return store.get(id);
     }
     public void update(Accident accident) {
-        store.replace(accident.getId(), accident);
+       store.replace(accident.getId().get(), accident);
+
     }
 }

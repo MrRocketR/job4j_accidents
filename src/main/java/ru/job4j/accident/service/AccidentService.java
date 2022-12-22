@@ -22,13 +22,10 @@ public class AccidentService {
     public void add(Accident accident) {
         accidentRepository.add(accident);
     }
-    public Collection<Accident> show() {
+    public Collection<Accident> showAccidents() {
         Collection<Accident> accidents = accidentRepository.show();
         List<AccidentType> types = types();
         List<Rule> rules = rules();
-        for (Accident a: accidents) {
-            a.setType(types.get(a.getId()));
-        }
         return accidents;
     }
 
