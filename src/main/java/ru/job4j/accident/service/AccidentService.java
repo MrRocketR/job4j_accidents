@@ -20,12 +20,11 @@ public class AccidentService {
     }
 
     public void add(Accident accident) {
+        accident.setType(getTypes().get(accident.getType().getId()));
         accidentRepository.add(accident);
     }
     public Collection<Accident> showAccidents() {
         Collection<Accident> accidents = accidentRepository.show();
-        List<AccidentType> types = types();
-        List<Rule> rules = rules();
         return accidents;
     }
 
@@ -35,7 +34,7 @@ public class AccidentService {
     public void update(Accident accident) {
         accidentRepository.update(accident);
     }
-    public List<AccidentType> types() {
+    public List<AccidentType> getTypes() {
         List<AccidentType> types = new ArrayList<>();
         types.add(new AccidentType(1, "Две машины"));
         types.add(new AccidentType(2, "Машина и человек"));
