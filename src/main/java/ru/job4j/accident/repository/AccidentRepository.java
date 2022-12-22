@@ -11,14 +11,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AccidentRepository {
 
     private  ConcurrentHashMap<Integer, Accident> store = new ConcurrentHashMap<>();
-    private  AtomicInteger generatedIds = new AtomicInteger(0);
+    private  static AtomicInteger generatedIds = new AtomicInteger(1);
 
     public void add(Accident accident) {
         while (store.containsKey(generatedIds.get())) {
             generatedIds.incrementAndGet();
         }
-        accident.setId(generatedIds);
-        store.put(accident.getId().get(), accident);
+        accident.setId(generatedIds.get());
+        store.put(generatedIds.get(), accident);
     }
 
     public Collection<Accident> show() {
@@ -29,7 +29,7 @@ public class AccidentRepository {
         return store.get(id);
     }
     public void update(Accident accident) {
-       store.replace(accident.getId().get(), accident);
+       store.replace(accident.getId(), accident);
 
     }
 }

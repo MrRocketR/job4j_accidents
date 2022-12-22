@@ -12,10 +12,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Accident {
 
     @EqualsAndHashCode.Include
-    private AtomicInteger id;
+    private int id;
     private String name;
     private String text;
     private String address;
     private AccidentType type;
+    private Set<Rule> rules;
 
 }
