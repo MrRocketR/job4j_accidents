@@ -14,6 +14,7 @@ import ru.job4j.accident.service.AccidentService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Controller
 public class AccidentController {
@@ -26,7 +27,6 @@ public class AccidentController {
     @GetMapping("/accidents")
     public String accidents(Model model) {
         Collection<Accident> accidents = service.showAccidents();
-        System.out.println(accidents);
         model.addAttribute("user", "John Doe");
         model.addAttribute("accidents", accidents);
         return "accidents";
@@ -35,7 +35,7 @@ public class AccidentController {
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
         Collection<AccidentType> types = service.getTypes().values();
-        List<Rule> rules = service.getRules();
+        Collection<Rule> rules = service.getRules().values();
         model.addAttribute("types", types);
         model.addAttribute("rules", rules);
         return "createAccident";
@@ -45,6 +45,7 @@ public class AccidentController {
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
         String[] ids = req.getParameterValues("rIds");
+        Stream.of(ids).forEach(System.out::println);
         service.fillRules(accident, ids);
         service.add(accident);
         return "redirect:/accidents";
