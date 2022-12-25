@@ -34,7 +34,7 @@ public class AccidentController {
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        Collection<AccidentType> types = service.getTypes().values();
+        List<AccidentType> types = service.getTypes();
         Collection<Rule> rules = service.getRules().values();
         model.addAttribute("types", types);
         model.addAttribute("rules", rules);

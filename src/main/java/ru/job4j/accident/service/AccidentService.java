@@ -19,7 +19,11 @@ public class AccidentService {
     }
 
     public void add(Accident accident) {
-        accident.setType(getTypes().get(accident.getType().getId()));
+        List<AccidentType> types = getTypes();
+        AccidentType type = types.stream()
+                .filter(at -> at.getId() == accident.getType()
+                        .getId()).findFirst().get();
+        accident.setType(type);
         accidentRepository.add(accident);
     }
 
@@ -36,12 +40,12 @@ public class AccidentService {
         accidentRepository.update(accident);
     }
 
-    public Map<Integer, AccidentType> getTypes() {
-        Map<Integer, AccidentType> map = new HashMap<>();
-        map.put(1, new AccidentType(1, "Две машины"));
-        map.put(2, new AccidentType(2, "Машина и человек"));
-        map.put(3, new AccidentType(3, "Машина и велосипед"));
-        return map;
+    public List<AccidentType> getTypes() {
+        List<AccidentType> types = new ArrayList<>();
+        types.add(new AccidentType(1, "Две машины"));
+        types.add(new AccidentType(2, "Машина и человек"));
+        types.add(new AccidentType(3, "Машина и велосипед"));
+        return types;
     }
 
     public Map<Integer, Rule> getRules() {
