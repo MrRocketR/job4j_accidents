@@ -49,12 +49,10 @@ public class AccidentService {
     }
 
     public Map<Integer, Rule> getRules() {
-        Map<Integer, Rule> map = new HashMap<>();
-        map.put(1, new Rule(1, "Статья. 1"));
-        map.put(2, new Rule(2, "Статья. 2"));
-        map.put(3, new Rule(3, "Статья. 3"));
-        return map;
+        return accidentRepository.getRules();
     }
+
+
 
     public void fillRules(Accident accident, String[] rls) {
         accident.setRules(new HashSet<>());
