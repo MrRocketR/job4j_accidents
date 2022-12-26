@@ -15,6 +15,13 @@ public class AccidentRepositoryMeme {
 
     private final ConcurrentHashMap<Integer, Accident> store = new ConcurrentHashMap<>();
     private final AtomicInteger generatedIds = new AtomicInteger();
+    private final  Map<Integer, Rule> map = new HashMap<>();
+
+    public AccidentRepositoryMeme() {
+        map.put(1, new Rule(1, "Статья. 1"));
+        map.put(2, new Rule(2, "Статья. 2"));
+        map.put(3, new Rule(3, "Статья. 3"));
+    }
 
     public void add(Accident accident) {
         accident.setId(generatedIds.incrementAndGet());
@@ -34,10 +41,6 @@ public class AccidentRepositoryMeme {
     }
 
     public Map<Integer, Rule> getRules() {
-        Map<Integer, Rule> map = new HashMap<>();
-        map.put(1, new Rule(1, "Статья. 1"));
-        map.put(2, new Rule(2, "Статья. 2"));
-        map.put(3, new Rule(3, "Статья. 3"));
         return map;
     }
 }
