@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -21,6 +23,14 @@ public class Accident {
     private String name;
     private String text;
     private String address;
+    @ManyToMany
+    @JoinColumn(name = "type_id")
     private AccidentType type;
+
+    @ManyToMany
+    @JoinTable(name = "rules_accidents",
+            joinColumns = {@JoinColumn(name = "fk_accident_id")},
+            inverseJoinColumns = {@JoinColumn(name = "fk_rules_id")}
+    )
     private Set<Rule> rules;
 }
