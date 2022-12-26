@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
-public class AccidentRepository {
+public class AccidentRepositoryMeme {
 
     private final ConcurrentHashMap<Integer, Accident> store = new ConcurrentHashMap<>();
     private final AtomicInteger generatedIds = new AtomicInteger();

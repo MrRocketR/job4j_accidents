@@ -9,18 +9,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
-import ru.job4j.accident.service.AccidentService;
+import ru.job4j.accident.service.AccidentServiceMeme;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Controller
 public class AccidentController {
-    private final AccidentService service;
+    private final AccidentServiceMeme service;
 
-    public AccidentController(AccidentService service) {
+    public AccidentController(AccidentServiceMeme service) {
         this.service = service;
     }
 

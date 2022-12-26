@@ -4,18 +4,22 @@ import org.springframework.stereotype.Service;
 import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
-import ru.job4j.accident.repository.AccidentRepository;
+import ru.job4j.accident.repository.AccidentRepositoryMeme;
 
 import java.util.*;
 import java.util.stream.Stream;
 
 @Service
-public class AccidentService {
+public class AccidentServiceMeme {
 
-    private final AccidentRepository accidentRepository;
+    private final AccidentRepositoryMeme accidentRepositoryMeme;
+    private final List<AccidentType> types = new ArrayList<>();
 
-    public AccidentService(AccidentRepository accidentRepository) {
-        this.accidentRepository = accidentRepository;
+    public AccidentServiceMeme(AccidentRepositoryMeme accidentRepositoryMeme) {
+        this.accidentRepositoryMeme = accidentRepositoryMeme;
+        types.add(new AccidentType(1, "Две машины"));
+        types.add(new AccidentType(2, "Машина и человек"));
+        types.add(new AccidentType(3, "Машина и велосипед"));
     }
 
     public void add(Accident accident) {
@@ -24,34 +28,29 @@ public class AccidentService {
                 .filter(at -> at.getId() == accident.getType()
                         .getId()).findFirst().get();
         accident.setType(type);
-        accidentRepository.add(accident);
+        accidentRepositoryMeme.add(accident);
     }
 
     public Collection<Accident> showAccidents() {
-        Collection<Accident> accidents = accidentRepository.show();
+        Collection<Accident> accidents = accidentRepositoryMeme.show();
         return accidents;
     }
 
     public Accident findById(int id) {
-        return accidentRepository.findById(id);
+        return accidentRepositoryMeme.findById(id);
     }
 
     public void update(Accident accident) {
-        accidentRepository.update(accident);
+        accidentRepositoryMeme.update(accident);
     }
 
     public List<AccidentType> getTypes() {
-        List<AccidentType> types = new ArrayList<>();
-        types.add(new AccidentType(1, "Две машины"));
-        types.add(new AccidentType(2, "Машина и человек"));
-        types.add(new AccidentType(3, "Машина и велосипед"));
         return types;
     }
 
     public Map<Integer, Rule> getRules() {
-        return accidentRepository.getRules();
+        return accidentRepositoryMeme.getRules();
     }
-
 
 
     public void fillRules(Accident accident, String[] rls) {
