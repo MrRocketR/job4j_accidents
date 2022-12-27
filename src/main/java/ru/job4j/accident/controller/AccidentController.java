@@ -33,8 +33,8 @@ public class AccidentController {
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        List<AccidentType> types = service.getTypes();
-        Collection<Rule> rules = service.getRules().values();
+        Collection<AccidentType> types = service.getTypes();
+        Collection<Rule> rules = service.getRules();
         model.addAttribute("types", types);
         model.addAttribute("rules", rules);
         return "createAccident";
@@ -44,8 +44,7 @@ public class AccidentController {
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
         String[] ids = req.getParameterValues("rIds");
-        service.fillRules(accident, ids);
-        service.add(accident);
+        service.add(accident, ids);
         return "redirect:/accidents";
     }
 
