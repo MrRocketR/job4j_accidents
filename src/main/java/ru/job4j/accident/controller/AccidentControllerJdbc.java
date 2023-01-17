@@ -30,7 +30,6 @@ public class AccidentControllerJdbc {
         Collection<Accident> accidents = service.showAccidents();
         model.addAttribute("user", "John Doe");
         model.addAttribute("accidents", accidents);
-        jdbc.test();
         return "accidents";
     }
 
