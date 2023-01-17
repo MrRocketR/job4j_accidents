@@ -7,40 +7,39 @@ import ru.job4j.accident.model.Rule;
 import ru.job4j.accident.repository.AccidentRepositoryMeme;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 @Service
 public class AccidentServiceMeme {
 
-    private final AccidentRepositoryMeme accidentRepositoryMeme;
+    private final AccidentRepositoryMeme store;
 
     public AccidentServiceMeme(AccidentRepositoryMeme accidentRepositoryMeme) {
-        this.accidentRepositoryMeme = accidentRepositoryMeme;
+        this.store = accidentRepositoryMeme;
     }
 
     public void add(Accident accident, String[] ids) {
-        accidentRepositoryMeme.add(accident, ids);
+        store.add(accident, ids);
     }
 
     public Collection<Accident> showAccidents() {
-        Collection<Accident> accidents = accidentRepositoryMeme.show();
+        Collection<Accident> accidents = store.show();
         return accidents;
     }
 
     public Accident findById(int id) {
-        return accidentRepositoryMeme.findById(id);
+        return store.findById(id);
     }
 
     public void update(Accident accident) {
-        accidentRepositoryMeme.update(accident);
+        store.update(accident);
     }
 
     public Collection<AccidentType> getTypes() {
-        return accidentRepositoryMeme.getTypes();
+        return store.getTypes();
     }
 
     public Collection<Rule> getRules() {
-        return accidentRepositoryMeme.getRules();
+        return store.getRules();
     }
 
 }

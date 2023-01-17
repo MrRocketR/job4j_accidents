@@ -12,11 +12,8 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name = "rules")
 public class Rule {
     @EqualsAndHashCode.Include
     private int id;
-
     private String name;
 }

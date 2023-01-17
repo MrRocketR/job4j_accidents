@@ -10,8 +10,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name = "accident_type")
+
 public class AccidentType {
     @EqualsAndHashCode.Include
     private int id;

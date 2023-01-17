@@ -6,13 +6,14 @@ import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
 
+import java.sql.ResultSet;
 import java.util.*;
 
 @Repository
 public class AccidentJdbcTemplate {
     private final JdbcTemplate jdbc;
-    private Map<Integer, Rule> rules;
-    private Map<Integer, AccidentType> types;
+    private Map<Integer, Rule> rules = new HashMap<>();
+    private Map<Integer, AccidentType> types = new HashMap<>();
 
     public AccidentJdbcTemplate(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
@@ -20,70 +21,72 @@ public class AccidentJdbcTemplate {
         types = getTypesForDB();
     }
 
-    public Accident save(Accident accident, String[] ids) {
-        String updateSQL = "insert into accident (name, text, address, type_id) values (?,?,?,?)";
-        String updateManyToMany = "insert into rules_accidents (fk_accident_id, fk_rules_id) values (?,?)";
-        jdbc.update(updateSQL, accident.getName(),
-                accident.getText(),
-                accident.getAddress(),
-                accident.getType().getId());
-
-        for (String id : ids) {
-            jdbc.update(updateManyToMany, accident.getId(), Integer.valueOf(id));
-        }
-        return accident;
-    }
-
-    public Map<Integer, Rule> getRulesForDB() {
-        String sql = "select from rules";
-        List<Rule> list = jdbc.query(
-                sql,
-                (rs, rowNum) ->
-                        new Rule(
-                                rs.getInt("id"),
-                                rs.getString("name")
-                        )
-        );
-        for (Rule r : list) {
+    private Map<Integer, Rule> getRulesForDB() {
+        String sql = "select * from rules";
+        List<Rule> listRs = jdbc.query(
+                sql, (rs, rowNum) -> {
+                    Rule rule = new Rule();
+                    rule.setId(rs.getInt("id"));
+                    rule.setName(rs.getString("name"));
+                    return rule;
+                });
+        for (Rule r : listRs) {
             rules.put(r.getId(), r);
         }
         return rules;
     }
 
-    public Collection<Rule> getRulesList() {
-        return rules.values();
-    }
-
-    public Map<Integer, AccidentType> getTypesForDB() {
-        String sql = "select from accident_type";
-        List<AccidentType> list = jdbc.query(
-                sql,
-                (rs, rowNum) ->
-                        new AccidentType(
-                                rs.getInt("id"),
-                                rs.getString("name")
-                        )
-        );
-        for (AccidentType ac : list) {
-            types.put(ac.getId(), ac);
+    private Map<Integer, AccidentType> getTypesForDB() {
+        String sql = "select * from accident_type";
+        List<AccidentType> listRs = jdbc.query(
+                sql, (rs, rowNum) -> {
+                    AccidentType type = new AccidentType();
+                    type.setId(rs.getInt("id"));
+                    type.setName(rs.getString("name"));
+                    return type;
+                });
+        for (AccidentType type : listRs) {
+            types.put(type.getId(), type);
         }
         return types;
     }
 
-    public Collection<AccidentType> getTypesList() {
-        return types.values();
+    public Collection<Accident> show() {
+        String sql = "select a.id, a.name, a.text, a.address, a.type_id, at.name as type_name\n"
+                + "from accidents as a\n"
+                + "inner join accident_type as at\n"
+                + "on at.id = a.type_id";
+        List<Accident> accidents = jdbc.query(sql, new AccidentMapper());
+        return accidents;
     }
 
-    public List<Accident> getAll() {
-        String sql = "select id, name, text, address, type_id from accidents";
-        return jdbc.query(sql,
-                (rs, row) -> {
-                    Accident accident = new Accident();
-                    accident.setId(rs.getInt("id"));
-                    accident.setName(rs.getString("name"));
-                    accident.setAddress(rs.getString("address"));
-                    accident.setType(types.get(rs.getInt("type_id")));
-                    return accident;
-                });
+
+    public void insert(Accident accident, String[] ids) {
+        String updateAccident = "insert into accidents (id, name, text, address, type_id) values (?,?,?,?,?)";
+        String updateRules = "insert into rules_accidents (fk_accident_id, fk_rules_id) values (?,?)";
+        jdbc.update(updateAccident,
+                accident.getId(),
+                accident.getName(),
+                accident.getText(),
+                accident.getAddress(),
+                accident.getType().getId());
+        for (String id : ids) {
+            jdbc.update(updateRules, accident.getId(), Integer.valueOf(id));
+        }
     }
-}
+
+    public void update(Accident accident, int id) {
+        String sql = "insert into accidents (name, text, address) values (?,?,?) where id = ?";
+        jdbc.update(sql,
+                accident.getName(),
+                accident.getText(),
+                accident.getAddress(),
+                accident.getId());
+    }
+    public Accident findById(int id) {
+        String sql = "select * from accidents where id = ?";
+        Accident accident = (Accident) jdbc.query(sql, new AccidentMapper());
+        return accident;
+    }
+    }
+
