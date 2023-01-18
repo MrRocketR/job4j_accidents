@@ -10,20 +10,19 @@ import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
 import ru.job4j.accident.service.AccidentServiceJDBC;
-import ru.job4j.accident.service.AccidentServiceMeme;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
 @Controller
 public class AccidentControllerJdbc {
-    private final AccidentServiceMeme service;
-    public final AccidentServiceJDBC jdbc;
 
-    public AccidentControllerJdbc(AccidentServiceMeme service, AccidentServiceJDBC jdbc) {
+    public final AccidentServiceJDBC service;
+
+    public AccidentControllerJdbc(AccidentServiceJDBC service) {
         this.service = service;
-        this.jdbc = jdbc;
     }
+
 
     @GetMapping("/accidents")
     public String accidents(Model model) {
