@@ -6,6 +6,7 @@ import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
 import ru.job4j.accident.repository.AccidentJdbcTemplate;
+
 import java.util.List;
 
 @Service
@@ -33,7 +34,7 @@ public class AccidentServiceJDBC {
         store.insertNewAccident(accident, ids);
     }
 
-    public void update(Accident accident) {
-        store.update(accident);
+    public void update(Accident accident, String[] ids) {
+        store.update(accident, ids);
     }
 }

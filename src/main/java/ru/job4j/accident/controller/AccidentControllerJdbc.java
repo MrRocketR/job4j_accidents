@@ -51,14 +51,19 @@ public class AccidentControllerJdbc {
 
     @GetMapping("/formUpdateAccident/{id}")
     public String viewEditAccident(Model model, @PathVariable("id") int id) {
+        Collection<AccidentType> types = service.getTypes();
+        Collection<Rule> rules = service.getRules();
         model.addAttribute("accident", service.findById(id));
+        model.addAttribute("types", types);
+        model.addAttribute("rules", rules);
         return "editAccident";
     }
 
 
     @PostMapping("/updateAccident")
-    public String edit(@ModelAttribute Accident accident) {
-        service.update(accident);
+    public String edit(@ModelAttribute Accident accident, HttpServletRequest req) {
+        String[] ids = req.getParameterValues("rIds");
+        service.update(accident, ids);
         return "redirect:/accidents";
     }
 

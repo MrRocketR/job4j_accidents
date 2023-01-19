@@ -106,24 +106,24 @@ public class AccidentJdbcTemplate {
     }
 
     public Accident findById(int id) {
-        String sql = "select a.id, a.name, a.text, a.address, a.type_id, at.name as type_name,\n"
-                + "ra.fk_rules_id as rule_id, r.name as rule_name\n"
-                + "from accidents as a\n"
-                + "inner join accident_type as at on a.type_id = at.id\n"
-                + "inner join rules_accidents as ra on a.id = ra.fk_accident_id\n"
-                + "inner join rules as r on r.id = ra.fk_rules_id\n"
-                + "where a.id = ?";
-        Map<Integer, Accident> accidentById = jdbc.query(sql, extractorForOne, id);
+        String sql = "select a.id, a.name, a.text, a.address, a.type_id, at.name as type_name, "
+                + System.lineSeparator() + "ra.fk_rules_id as rule_id, r.name as rule_name "
+                + System.lineSeparator() + "from accidents as a "
+                + System.lineSeparator() + "inner join accident_type as at on a.type_id = at.id"
+                + System.lineSeparator() + "inner join rules_accidents as ra on a.id = ra.fk_accident_id"
+                + System.lineSeparator() + "inner join rules as r on r.id = ra.fk_rules_id"
+                + System.lineSeparator() + "where a.id = ?";
+        Map<Integer, Accident> accidentById = jdbc.query(sql, extractor, id);
         return accidentById.get(id);
     }
 
     public Collection<Accident> show() {
-        String sql = "select a.id, a.name, a.text, a.address, a.type_id, at.name as type_name,\n"
-                + "ra.fk_rules_id as rule_id, r.name as rule_name\n"
-                + "from accidents as a\n"
-                + "inner join accident_type as at on a.type_id = at.id\n"
-                + "inner join rules_accidents as ra on a.id = ra.fk_accident_id\n"
-                + "inner join rules as r on r.id = ra.fk_rules_id";
+        String sql = "select a.id, a.name, a.text, a.address, a.type_id, at.name as type_name, "
+                + System.lineSeparator() + "ra.fk_rules_id as rule_id, r.name as rule_name "
+                + System.lineSeparator() + "from accidents as a "
+                + System.lineSeparator() + "inner join accident_type as at on a.type_id = at.id"
+                + System.lineSeparator() + "inner join rules_accidents as ra on a.id = ra.fk_accident_id"
+                + System.lineSeparator() + "inner join rules as r on r.id = ra.fk_rules_id";
         Map<Integer, Accident> accidentMap = jdbc.query(sql, extractor);
         return accidentMap.values();
     }
@@ -152,16 +152,27 @@ public class AccidentJdbcTemplate {
     }
 
 
-    public void update(Accident accident) {
-        String sql = "insert into accidents (name, text, address) values (?,?,?) where id = ?";
+    public void update(Accident accident, String[] ids) {
+        String clear =  "delete from rules_accidents where fk_accident_id = ?";
+        String updateRules = "insert into rules_accidents (fk_accident_id, fk_rules_id) values (?,?)";
+        String sql = "UPDATE accidents SET name = ?, text = ?, address = ?,  type_id = ?  where id = ?";
+        jdbc.update(clear, accident.getId());
         jdbc.update(con -> {
             PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, accident.getName());
             statement.setString(2, accident.getText());
             statement.setString(3, accident.getAddress());
-            statement.setInt(4, accident.getId());
+            statement.setInt(4, accident.getType().getId());
+            statement.setInt(5, accident.getId());
             return statement;
         });
+        for (String id : ids) {
+            jdbc.update(
+                    updateRules,
+                    accident.getId(),
+                    Integer.parseInt(id)
+            );
+        }
             }
 
     }
