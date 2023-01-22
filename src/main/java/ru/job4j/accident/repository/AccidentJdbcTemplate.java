@@ -52,11 +52,9 @@ public class AccidentJdbcTemplate {
             type.setName(rs.getString("type_name"));
             accident.setType(type);
             result.putIfAbsent(accident.getId(), accident);
-            result.get(accident.getId())
-                    .getRules()
-                    .add(new Rule(rs.getInt("rule_id"),
-                            rs.getString("rule_name")));
-        }
+            result.get(accident.getId()).getRules().
+                    add(new Rule(rs.getInt("rule_id"),
+                            rs.getString("rule_name")));        }
         return result;
     };
 

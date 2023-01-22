@@ -9,17 +9,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
+import ru.job4j.accident.service.AccidentServiceHibernate;
 import ru.job4j.accident.service.AccidentServiceJDBC;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
+@Controller
+public class AccidentControllerHibernate {
 
-public class AccidentControllerJdbc {
+    public final AccidentServiceHibernate service;
 
-    public final AccidentServiceJDBC service;
-
-    public AccidentControllerJdbc(AccidentServiceJDBC service) {
+    public AccidentControllerHibernate(AccidentServiceHibernate service) {
         this.service = service;
     }
 

@@ -1,31 +1,30 @@
 package ru.job4j.accident.service;
 
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
 import ru.job4j.accident.repository.AccidentHibernate;
-import ru.job4j.accident.repository.AccidentJdbcTemplate;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class AccidentServiceJDBC {
-    private final AccidentJdbcTemplate store;
+public class AccidentServiceHibernate {
+    private final AccidentHibernate store;
 
     public List<Rule> getRules() {
-        return store.getRulesFromDB();
+        return store.getRules();
     }
 
     public List<AccidentType> getTypes() {
-        return store.getTypesFromDB();
+        return store.getTypes();
     }
 
     public List<Accident> showAccidents() {
-        return store.show().stream().toList();
+        return store.showAll();
     }
 
     public Accident findById(int id) {
@@ -33,7 +32,7 @@ public class AccidentServiceJDBC {
     }
 
     public void add(Accident accident, String[] ids) {
-        store.insertNewAccident(accident, ids);
+        store.save(accident, ids);
     }
 
     public void update(Accident accident, String[] ids) {
