@@ -72,7 +72,6 @@ public class AccidentHibernate {
 
     public Accident findById(int id) {
         String sql = "from Accident a join fetch a.type_id where id = :fId";
-        Map<Integer, Accident> accidentMap = new HashMap<>();
         try (Session session = sf.openSession()) {
             Query<Accident> qAccident = session.createQuery(sql, Accident.class);
             qAccident.setParameter("fId", id);
