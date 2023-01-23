@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 
-@Controller
+
 public class AccidentControllerCrudData {
 
     private final AccidentServiceSpringData service;
@@ -62,8 +62,7 @@ public class AccidentControllerCrudData {
 
     @PostMapping("/updateAccident")
     public String edit(@ModelAttribute Accident accident, HttpServletRequest req) {
-        String[] ids = req.getParameterValues("rIds");
-        service.update(accident, ids);
+        service.update(accident);
         return "redirect:/accidents";
     }
 }

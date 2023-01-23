@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
-import ru.job4j.accident.repository.AccidentRepositoryCrudAccident;
-import ru.job4j.accident.repository.AccidentRepositoryCrudRule;
-import ru.job4j.accident.repository.AccidentRepositoryCrudType;
+import ru.job4j.accident.repository.orm.AccidentRepositoryCrudAccident;
+import ru.job4j.accident.repository.orm.AccidentRepositoryCrudRule;
+import ru.job4j.accident.repository.orm.AccidentRepositoryCrudType;
 
 import java.util.List;
 import java.util.Map;
@@ -48,14 +48,7 @@ public class AccidentServiceSpringData {
         accidentalStore.save(accident);
     }
 
-    public void update(Accident accident, String[] ids) {
-        List<Rule> rules = getRules();
-        Map<Integer, Rule> map = rules.stream().
-                collect(Collectors.toMap(Rule::getId, Function.identity()));
-        for (String s : ids) {
-            accident.getRules().add(map.get(Integer.parseInt(s)));
-
-        }
+    public void update(Accident accident) {
         accidentalStore.updateAccident(
                 accident.getName(),
                 accident.getText(),

@@ -1,4 +1,4 @@
-package ru.job4j.accident.repository;
+package ru.job4j.accident.repository.jdbc;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -54,7 +54,8 @@ public class AccidentJdbcTemplate {
             result.putIfAbsent(accident.getId(), accident);
             result.get(accident.getId()).getRules().
                     add(new Rule(rs.getInt("rule_id"),
-                            rs.getString("rule_name")));        }
+                            rs.getString("rule_name")));
+        }
         return result;
     };
 
@@ -115,11 +116,8 @@ public class AccidentJdbcTemplate {
     }
 
 
-    public void update(Accident accident, String[] ids) {
-        String clear = "delete from rules_accidents where fk_accident_id = ?";
-        String updateRules = "insert into rules_accidents (fk_accident_id, fk_rules_id) values (?,?)";
+    public void update(Accident accident) {
         String sql = "UPDATE accidents SET name = ?, text = ?, address = ?,  type_id = ?  where id = ?";
-        jdbc.update(clear, accident.getId());
         jdbc.update(con -> {
             PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, accident.getName());
@@ -129,14 +127,8 @@ public class AccidentJdbcTemplate {
             statement.setInt(5, accident.getId());
             return statement;
         });
-        for (String id : ids) {
-            jdbc.update(
-                    updateRules,
-                    accident.getId(),
-                    Integer.parseInt(id)
-            );
         }
     }
 
-}
+
 

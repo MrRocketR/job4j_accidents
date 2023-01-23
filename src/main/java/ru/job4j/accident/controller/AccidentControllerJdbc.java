@@ -62,8 +62,7 @@ public class AccidentControllerJdbc {
 
     @PostMapping("/updateAccident")
     public String edit(@ModelAttribute Accident accident, HttpServletRequest req) {
-        String[] ids = req.getParameterValues("rIds");
-        service.update(accident, ids);
+        service.update(accident);
         return "redirect:/accidents";
     }
 
