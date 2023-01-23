@@ -15,7 +15,7 @@ import ru.job4j.accident.service.AccidentServiceJDBC;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
-
+@Controller
 public class AccidentControllerHibernate {
 
     public final AccidentServiceHibernate service;
@@ -63,8 +63,7 @@ public class AccidentControllerHibernate {
 
     @PostMapping("/updateAccident")
     public String edit(@ModelAttribute Accident accident, HttpServletRequest req) {
-        String[] ids = req.getParameterValues("rIds");
-        service.update(accident, ids);
+        service.update(accident.getId(), accident);
         return "redirect:/accidents";
     }
 
