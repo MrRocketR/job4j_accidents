@@ -56,11 +56,6 @@ public class AccidentServiceSpringData {
 
     }
 
-    /*@Transactional("update")
-    public void update(Accident accident) {
-
-    }*/
-
     public Accident findById(int id) {
         return aStore.getById(id);
     }
