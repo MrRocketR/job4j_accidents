@@ -35,22 +35,23 @@ public class AccidentHibernate {
     }
 
     public List<Accident> showAll() {
-        return repo.query("from Accident a join fetch a.type_id", Accident.class);
+        return repo.query("from Accident a join fetch a.type", Accident.class);
     }
 
     public Optional<Accident> findById(int id) {
-        return repo.optional("from Accident where id =:fd", Accident.class,
+        return repo.optional("from Accident a join fetch a.type where a.id =:fId", Accident.class,
                 Map.of("fId", id));
     }
 
     public void update(int id, Accident accident) {
-        repo.run("UPDATE Accident as a SET "
-                        + "a.name =  :fName, a.text = :fText,  a.address = :fAddress"
-                        +  "WHERE  t.id = :fId",
+        repo.run("UPDATE Accident as a SET a.name =  :fName, a.text = :fText,  a.address = :fAddress"
+                        + " WHERE  a.id = :fId",
                 Map.of("fId", id,
                         "fName", accident.getName(),
                         "fText", accident.getText(),
                         "fAddress", accident.getAddress()));
     }
 }
+
+
 
