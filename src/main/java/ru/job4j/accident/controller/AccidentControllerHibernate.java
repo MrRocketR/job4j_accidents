@@ -15,7 +15,7 @@ import ru.job4j.accident.service.AccidentServiceJDBC;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
-@Controller
+
 public class AccidentControllerHibernate {
 
     public final AccidentServiceHibernate service;

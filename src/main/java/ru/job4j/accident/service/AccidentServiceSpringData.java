@@ -8,6 +8,7 @@ import ru.job4j.accident.model.Rule;
 import ru.job4j.accident.repository.orm.AccidentRepositoryCrudAccident;
 import ru.job4j.accident.repository.orm.AccidentRepositoryCrudRule;
 import ru.job4j.accident.repository.orm.AccidentRepositoryCrudType;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -17,47 +18,51 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class AccidentServiceSpringData {
-    private final AccidentRepositoryCrudAccident accidentalStore;
-    private final AccidentRepositoryCrudType typeStore;
-    private final AccidentRepositoryCrudRule ruleStore;
+    private final AccidentRepositoryCrudAccident aStore;
+    private final AccidentRepositoryCrudType tStore;
+    private final AccidentRepositoryCrudRule rStore;
 
-    public void create(Accident accident) {
-        accidentalStore.save(accident);
-    }
 
     public List<Accident> getAll() {
-        return accidentalStore.findAllAccidents();
+        return aStore.findAllAccidents();
     }
 
     public List<AccidentType> getTypes() {
-        return typeStore.getTypes();
+        return tStore.getTypes();
     }
 
     public List<Rule> getRules() {
-        return ruleStore.getRules();
+        return rStore.getRules();
     }
 
-
+    @Transactional
     public void addAccident(Accident accident, String[] ids) {
         List<Rule> rules = getRules();
         Map<Integer, Rule> map = rules.stream().
                 collect(Collectors.toMap(Rule::getId, Function.identity()));
-        for (String s : ids) {
-            accident.getRules().add(map.get(Integer.parseInt(s)));
+        if (accident.getId() == 0) {
+            for (String s : ids) {
+                accident.getRules().add(map.get(Integer.parseInt(s)));
+            }
+            aStore.save(accident);
+        } else {
+            aStore.updateAccident(
+                    accident.getName(),
+                    accident.getText(),
+                    accident.getAddress(),
+                    accident.getId());
         }
-        accidentalStore.save(accident);
+
+
     }
 
+    /*@Transactional("update")
     public void update(Accident accident) {
-        accidentalStore.updateAccident(
-                accident.getName(),
-                accident.getText(),
-                accident.getAddress(),
-                accident.getId());
-    }
+
+    }*/
 
     public Accident findById(int id) {
-        return accidentalStore.getById(id);
+        return aStore.getById(id);
     }
 
 }
