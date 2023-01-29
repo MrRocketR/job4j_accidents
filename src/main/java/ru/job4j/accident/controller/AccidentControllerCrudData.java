@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 
-@Controller
+
 public class AccidentControllerCrudData {
 
     private final AccidentServiceSpringData service;
