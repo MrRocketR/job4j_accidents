@@ -1,6 +1,5 @@
-package ru.job4j.accident.controller;
+package ru.job4j.accident.controller.old;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -9,24 +8,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
-import ru.job4j.accident.service.AccidentServiceSpringData;
+import ru.job4j.accident.service.AccidentServiceJDBC;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
-import java.util.List;
 
 
-public class AccidentControllerCrudData {
+public class AccidentControllerJdbc {
 
-    private final AccidentServiceSpringData service;
+    public final AccidentServiceJDBC service;
 
-    public AccidentControllerCrudData(AccidentServiceSpringData service) {
+    public AccidentControllerJdbc(AccidentServiceJDBC service) {
         this.service = service;
     }
 
+
     @GetMapping("/accidents")
     public String accidents(Model model) {
-        List<Accident> accidents = service.getAll();
+        Collection<Accident> accidents = service.showAccidents();
         model.addAttribute("user", "John Doe");
         model.addAttribute("accidents", accidents);
         return "accidents";
@@ -45,7 +44,7 @@ public class AccidentControllerCrudData {
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
         String[] ids = req.getParameterValues("rIds");
-        service.addAccident(accident, ids);
+        service.add(accident, ids);
         return "redirect:/accidents";
     }
 
@@ -62,8 +61,9 @@ public class AccidentControllerCrudData {
 
     @PostMapping("/updateAccident")
     public String edit(@ModelAttribute Accident accident, HttpServletRequest req) {
-        String[] ids = new String[0];
-        service.addAccident(accident, ids);
+        service.update(accident);
         return "redirect:/accidents";
     }
+
+
 }

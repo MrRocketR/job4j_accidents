@@ -1,6 +1,5 @@
-package ru.job4j.accident.controller;
+package ru.job4j.accident.controller.old;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -9,25 +8,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
-import ru.job4j.accident.service.AccidentServiceHibernate;
-import ru.job4j.accident.service.AccidentServiceJDBC;
+import ru.job4j.accident.service.AccidentServiceSpringData;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+import java.util.List;
 
 
-public class AccidentControllerHibernate {
+public class AccidentControllerCrudData {
 
-    public final AccidentServiceHibernate service;
+    private final AccidentServiceSpringData service;
 
-    public AccidentControllerHibernate(AccidentServiceHibernate service) {
+    public AccidentControllerCrudData(AccidentServiceSpringData service) {
         this.service = service;
     }
 
-
     @GetMapping("/accidents")
     public String accidents(Model model) {
-        Collection<Accident> accidents = service.showAccidents();
+        List<Accident> accidents = service.getAll();
         model.addAttribute("user", "John Doe");
         model.addAttribute("accidents", accidents);
         return "accidents";
@@ -46,7 +44,7 @@ public class AccidentControllerHibernate {
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
         String[] ids = req.getParameterValues("rIds");
-        service.add(accident, ids);
+        service.addAccident(accident, ids);
         return "redirect:/accidents";
     }
 
@@ -63,9 +61,8 @@ public class AccidentControllerHibernate {
 
     @PostMapping("/updateAccident")
     public String edit(@ModelAttribute Accident accident, HttpServletRequest req) {
-        service.update(accident.getId(), accident);
+        String[] ids = new String[0];
+        service.addAccident(accident, ids);
         return "redirect:/accidents";
     }
-
-
 }
