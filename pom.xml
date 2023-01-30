@@ -1,14 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.7.5</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
-
   <groupId>groupId</groupId>
   <artifactId>job4j_accidents</artifactId>
   <version>1.0-SNAPSHOT</version>
@@ -18,6 +16,24 @@
     <maven.compiler.source>16</maven.compiler.source>
     <maven.compiler.target>16</maven.compiler.target>
   </properties>
+  <!--<profiles>
+         <profile>
+             <id>test</id>
+             <properties>
+                 <liquibase.config>src/main/resources/application-test.properties</liquibase.config>
+             </properties>
+             <activation>
+                 <activeByDefault>true</activeByDefault>
+             </activation>
+         </profile>
+         <profile>
+             <id>production</id>
+             <properties>
+                 <liquibase.config>src/main/resources/db.properties</liquibase.config>
+             </properties>
+         </profile>
+     </profiles>-->
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -72,6 +88,10 @@
       <artifactId>spring-data-jpa</artifactId>
       <version>2.5.2</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -118,32 +138,37 @@
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-web</artifactId>
     </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-test</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-test-autoconfigure</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+      <version>4.15.0</version>
+    </dependency>
 
   </dependencies>
+
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>3.1.2</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>9.0</version>
-          </dependency>
-        </dependencies>
         <executions>
           <execution>
             <id>validate</id>
@@ -162,9 +187,48 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.7</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!--<plugin>
+          <groupId>org.liquibase</groupId>
+          <artifactId>liquibase-maven-plugin</artifactId>
+          <version>4.15.0</version>
+          <configuration>
+              <propertyFile>${liquibase.config}</propertyFile>
+          </configuration>
+          <executions>
+              <execution>
+                  <phase>process-resources</phase>
+                  <goals>
+                      <goal>clearCheckSums</goal>
+                      <goal>update</goal>
+                  </goals>
+              </execution>
+          </executions>
+      </plugin>-->
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M7</version>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>16</source>
+          <target>16</target>
+        </configuration>
       </plugin>
     </plugins>
   </build>

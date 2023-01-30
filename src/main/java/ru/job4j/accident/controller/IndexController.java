@@ -26,18 +26,13 @@ public class IndexController {
         this.service = service;
     }
 
-    @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        return "index";
-    }
 
-    @GetMapping("/accidents")
+    @GetMapping("/index")
     public String accidents(Model model) {
         Collection<Accident> accidents = service.getAll();
         model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         model.addAttribute("accidents", accidents);
-        return "accidents";
+        return "index";
     }
 
     @GetMapping("/createAccident")

@@ -19,23 +19,20 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class HbmConfig {
 
-    @Bean
-    public LocalSessionFactoryBean sessionFactory(@Value("${hibernate.dialect}") String dialect,
-                                                  @Value("${show_sql}") String sql, DataSource ds) {
+    public LocalSessionFactoryBean sessionFactory(@Value("${hibernate.dialect}") String dialect, DataSource dataSource) {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(ds);
+        sessionFactory.setDataSource(dataSource);
         sessionFactory.setPackagesToScan("ru.job4j.accident.model");
         Properties cfg = new Properties();
         cfg.setProperty("hibernate.dialect", dialect);
-        cfg.setProperty("show_sql", sql);
         sessionFactory.setHibernateProperties(cfg);
         return sessionFactory;
     }
 
-
-    public PlatformTransactionManager htx(SessionFactory sf) {
+    public PlatformTransactionManager htx(SessionFactory sessionFactory) {
         HibernateTransactionManager tx = new HibernateTransactionManager();
-        tx.setSessionFactory(sf);
+        tx.setSessionFactory(sessionFactory);
         return tx;
     }
 }
+
