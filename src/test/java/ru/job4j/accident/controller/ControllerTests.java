@@ -9,6 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.job4j.accident.App;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = App.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-@TestPropertySource("classpath:application.properties")
+@TestPropertySource(locations = "classpath:test.properties")
 public class ControllerTests {
     @Autowired
     private MockMvc mockMvc;
@@ -57,9 +58,5 @@ public class ControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(view().name("reg"));
     }
-
-
-
-
 
 }
