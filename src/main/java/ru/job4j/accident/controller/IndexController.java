@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
-import ru.job4j.accident.service.AccidentServiceJDBC;
 import ru.job4j.accident.service.AccidentServiceSpringData;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +48,7 @@ public class IndexController {
     public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
         String[] ids = req.getParameterValues("rIds");
         service.addAccident(accident, ids);
-        return "redirect:/accidents";
+        return "redirect:/index";
     }
 
     @GetMapping("/formUpdateAccident/{id}")
@@ -67,6 +66,6 @@ public class IndexController {
     public String edit(@ModelAttribute Accident accident, HttpServletRequest req) {
        String[] ids = new String[0];
         service.addAccident(accident, ids);
-        return "redirect:/accidents";
+        return "redirect:/index";
     }
 }

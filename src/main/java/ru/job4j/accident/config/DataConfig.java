@@ -1,10 +1,11 @@
 package ru.job4j.accident.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -18,7 +19,13 @@ import javax.sql.DataSource;
 @Configuration
 @EnableJpaRepositories("ru.job4j.accident.repository")
 @EnableTransactionManagement
+@PropertySource("classpath:application-prod.properties")
 public class DataConfig {
+    private final Environment environment;
+
+    public DataConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     @Primary
     @Bean
@@ -39,15 +46,12 @@ public class DataConfig {
         return txManager;
     }
     @Bean
-    public DataSource dataSource(@Value("${jdbc.driver}") String driver,
-                                 @Value("${jdbc.url}") String url,
-                                 @Value("${jdbc.username}") String username,
-                                 @Value("${jdbc.password}") String password) {
+    public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(driver);
-        dataSource.setUrl(url);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
+        dataSource.setDriverClassName(environment.getProperty("spring.datasource.driver-class-name"));
+        dataSource.setUrl(environment.getProperty("spring.datasource.url"));
+        dataSource.setUsername(environment.getProperty("spring.datasource.username"));
+        dataSource.setPassword(environment.getProperty("spring.datasource.password"));
         return dataSource;
     }
 }
