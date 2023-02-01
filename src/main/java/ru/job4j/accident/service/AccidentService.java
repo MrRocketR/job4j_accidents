@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class AccidentServiceSpringData {
+public class AccidentService {
     private final AccidentRepositoryCrudAccident aStore;
     private final AccidentRepositoryCrudType tStore;
     private final AccidentRepositoryCrudRule rStore;

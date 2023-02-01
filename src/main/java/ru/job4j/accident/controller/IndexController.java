@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
-import ru.job4j.accident.service.AccidentServiceSpringData;
+import ru.job4j.accident.service.AccidentService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -19,9 +19,9 @@ import java.util.Collection;
 @Controller
 public class IndexController {
 
-    private final AccidentServiceSpringData service;
+    private final AccidentService service;
 
-    public IndexController(AccidentServiceSpringData service) {
+    public IndexController(AccidentService service) {
         this.service = service;
     }
 
